@@ -1,6 +1,6 @@
 ## BJ added
 1. To view realtime monodepth image and to control turtlebot. 
-   - run midasDepthmap.py 
+   - run midasDepthMap.py 
 
 ## Towards Robust Monocular Depth Estimation: Mixing Datasets for Zero-shot Cross-dataset Transfer
 
