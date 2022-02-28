@@ -2,7 +2,7 @@
 1. To view realtime monodepth image and to control turtlebot. 
    - run midasDepthMap.py 
 2. Net structure?
-   - look 
+   - look midas_dpt_hybrid
 
 ## Towards Robust Monocular Depth Estimation: Mixing Datasets for Zero-shot Cross-dataset Transfer
 
