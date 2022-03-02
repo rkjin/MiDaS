@@ -5,7 +5,7 @@ import time
 import numpy as np
 import serial #pip3 install pyserial
 import os, sys
-
+import socket
 class turtlebot3():
     def __init__(self,free):
         self.free = free
@@ -51,7 +51,6 @@ class turtlebot3():
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         # Apply input transforms
         input_batch = self.transform(img).to(self.device)
-
         # Prediction and resize to original resolution
         with torch.no_grad():
             prediction = self.midas(input_batch)
@@ -61,62 +60,69 @@ class turtlebot3():
                 mode="bicubic",
                 align_corners=False,
             ).squeeze()
-
         depth_map = prediction.cpu().numpy()
-
         d_inv = 30000 / ( depth_map + 1e-9)
-        d_inv[d_inv > (self.free - 10)] = 255
-        d_inv = np.clip(d_inv, 0, 255).astype(np.uint8)  
-        if d_inv.min() > 30 :
-            is_Clear = d_inv.min()
+        d_inv = np.clip(d_inv, 0, 255).astype(np.uint8)
+        d_inv = cv2.blur(d_inv, (5,5))
+        print('length of 30',len(d_inv[d_inv < 30]))
+        if len(d_inv[d_inv < 30])  > 300 :
+            is_Clear = 0
         else:
-            is_Clear = 0      
+            is_Clear = d_inv.mean()
         return(img, depth_map,d_inv, is_Clear)
         
     def direction(self):
         min_distance = []
         _, _, d_inv, _ = self.check_image()
-        if d_inv[:320,:].mean() > d_inv[320:,:].mean():
-            l = True
+        if d_inv[:,:320].mean() < d_inv[:,320:].mean():
+            dir = True
         else:
-            l = False    
+            dir = False    
         for i in range(8):
-            if l:                
+            if dir:                
                 os.system('echo l > /dev/ttyACM0')
             else:    
                 os.system('echo r > /dev/ttyACM0')
-            time.sleep(1000)    
+            time.sleep(1)    
             _, _, _, is_Clear = self.check_image()
             min_distance.append(is_Clear)
             direction = argmax(min_distance)
-
-        if l:
+        print('min_distance', min_distance)    
+        if dir:
             os.system('echo '+'r'*(8-direction)+' > /dev/ttyACM0')
-            time.sleep((8-direction)*1000)
+            time.sleep((8-direction))
         else:
             os.system('echo '+'l'*(8-direction)+' > /dev/ttyACM0')
-            time.sleep((8-direction)*1000)
+            time.sleep((8-direction))
         return
 
 
 def monodepth():
+    sender = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
     free = cv2.imread('/home/bj/data/dnn/MiDaS/free.jpg',cv2.IMREAD_GRAYSCALE)
     fourcc = cv2.VideoWriter_fourcc(*'DIVX')
-    out = cv2.VideoWriter('/content/CFNet/output.avi', fourcc, 15, (640,960))
+    out = cv2.VideoWriter('/home/bj/data/dnn/MiDaS/output.avi', fourcc, 15, (1280,480))
     turtle = turtlebot3(free)
     mode =""
+    s = 0
     while True:
-        img, depth_map, _, is_Clear = turtle.check_image()
+        img, depth_map, d_inv, is_Clear = turtle.check_image()
         print('is_Clear',is_Clear)
         if is_Clear:
-            if mode is not 'f':
+            s = 0 
+            if mode != 'f':
                 mode = 'f'
                 os.system('echo f > /dev/ttyACM0')
         else:
-            if mode is not 's':
-                mode is 's'
+            s += 1
+            if s > 3:
+                mode = 's'
                 os.system('echo s > /dev/ttyACM0')
-            turtle.direction() 
+                turtle.direction() 
+                s = 0
+
+        messageToSend = 'min :'+str(d_inv.min()) + ' <35 : '+str(len(d_inv[d_inv < 35])) +' <40:'+str(len(d_inv[d_inv < 40]))
+        sender.sendto(str.encode(messageToSend), ('192.168.0.21', 7778))
 
         depth_map = cv2.normalize(depth_map, None, 0, 1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_64F)
         depth_map = (depth_map*255).astype(np.uint8)
@@ -124,8 +130,9 @@ def monodepth():
 
         img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         outimg = cv2.hconcat([img, depth_map])
+        print(outimg.shape)
         cv2.imshow('Image', outimg)
-#        out.write(outimg)
+        out.write(outimg)
         if cv2.waitKey(1) == 27:
             break
 
