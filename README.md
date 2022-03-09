@@ -1,5 +1,6 @@
 ## BJ added
 1. To view realtime monodepth image and to control turtlebot. 
+   - upload opencr2.ino  
    - run midasDepthMap.py 
 2. Net structure?
    - look midas_dpt_hybrid
