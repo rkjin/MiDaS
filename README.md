@@ -1,9 +1,12 @@
 ## BJ added
-1. To view realtime monodepth image and to control turtlebot. 
+1. Test mono depth.
+   - run mono_test.py
+2. To view realtime monodepth image and to control turtlebot. 
    - upload opencr2.ino  
    - run midasDepthMap.py 
-2. Net structure?
+3. Net structure?
    - look midas_dpt_hybrid
+
 
 ## Towards Robust Monocular Depth Estimation: Mixing Datasets for Zero-shot Cross-dataset Transfer
 
