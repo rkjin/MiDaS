@@ -135,9 +135,9 @@ def monodepth():
         out.write(outimg)
         if cv2.waitKey(1) == 27:
             break
-
+    cap.release()
 
 
 if __name__ == '__main__':
     monodepth()
-    cap.release()
+   
