@@ -205,10 +205,16 @@ void serialEvent(){
   else if (x == 'l'){
     dwb.goalVelocity(1, (int32_t)30);
     dwb.goalVelocity(2, (int32_t)-30);
+    delay(1000);
+    dwb.goalVelocity(1, (int32_t)0);
+    dwb.goalVelocity(2, (int32_t)0);
   }
   else if (x == 'r'){
     dwb.goalVelocity(1, (int32_t)30);
     dwb.goalVelocity(2, (int32_t)-30);
+    delay(3000);
+    dwb.goalVelocity(1, (int32_t)0);
+    dwb.goalVelocity(2, (int32_t)0);
   }    
   else if (x == 'b'){
     dwb.goalVelocity(1, (int32_t)-100);
