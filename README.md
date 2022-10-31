@@ -7,7 +7,7 @@
 3. Net structure?
    - look midas_dpt_hybrid 
 <br>
-<a href="default.asp"><img src="'https://github.com/rkjin/MiDaS/blob/master/SAM_0111-removebg-preview.png'></img> </a>
+
 
 ## Towards Robust Monocular Depth Estimation: Mixing Datasets for Zero-shot Cross-dataset Transfer
 
