@@ -25,7 +25,7 @@ Pytorch 설치
 
     $pip3 install Cython 
 
-    $pip3 install numpy torch-1.9.0-cp36-cp36m-linux_aarch64.whl
+    $pip3 install numpy torch-1.8.0-cp36-cp36m-linux_aarch64.whl
 
 torch2trt 설치
 
