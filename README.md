@@ -6,6 +6,99 @@
    - run midasDepthMap.py 
 3. Net structure?
    - look midas_dpt_hybrid 
+   
+고생 끝에...jetson nano 에 
+
+    jetpack 4.6.1 
+
+    $sudo apt update
+
+    $sudo apt install python3-pip
+
+    opencv, tensorrt는 jetpack에 기본으로 포함되어 있음
+
+Pytorch 설치
+
+    $wget https://nvidia.box.com/shared/static/p57jwntv436lfrd78inwl7iml6p13fzh.whl -O torch-1.8.0-cp36-cp36m-linux_aarch64.whl -O torch-1.9.0-cp36-cp36m-linux_aarch64.whl 
+
+    $sudo apt-get install python3-pip libopenblas-base libopenmpi-dev 
+
+    $pip3 install Cython 
+
+    $pip3 install numpy torch-1.9.0-cp36-cp36m-linux_aarch64.whl
+
+torch2trt 설치
+
+    $pip3 install packaging
+
+    $git clone https://github.com/NVIDIA-AI-IOT/torch2trt
+
+    $cd torch2trt
+
+    $sudo python3 setup.py install
+
+torchvision 설치
+
+    $pip3 install pillow
+
+    $sudo apt-get install libjpeg-dev zlib1g-dev libpython3-dev libavcodec-dev libavformat-dev libswscale-dev 
+
+    $git clone --branch release/0.9 https://github.com/pytorch/vision torchvision  
+
+    $cd torchvision 
+
+    $export BUILD_VERSION=0.9.0 
+
+    $python3 setup.py install --user
+
+scikit-image 설치
+
+    $sudo apt-get install liblapack-dev gfortran
+
+    scipy 설치
+
+       $wget https://github.com/scipy/scipy/releases/download/v1.3.3/scipy-1.3.3.tar.gz
+
+       $tar -xzvf scipy-1.3.3.tar.gz scipy-1.3.3
+
+       $cd scipy-1.3.3/
+
+       $python3 setup.py install --user
+
+    Tiff 설치
+
+       $wget https://download.osgeo.org/libtiff/tiff-4.1.0.tar.gz
+
+       $tar -xzvf tiff-4.1.0.tar.gz
+
+       $cd tiff-4.1.0/
+
+       $./configure
+ 
+       $make
+
+       $sudo make install
+
+    scikit-image 설치
+
+       $sudo apt-get install python3-sklearn
+
+       $sudo apt-get install libaec-dev libblosc-dev libffi-dev libbrotli-dev libboost-all-dev libbz2-dev
+
+       $sudo apt-get install libgif-dev libopenjp2-7-dev liblcms2-dev libjpeg-dev libjxr-dev liblz4-dev liblzma-dev libpng-dev libsnappy-dev libwebp-dev libzopfli-dev libzstd-dev
+
+       $sudo pip3 install imagecodecsp-dev libzopfli-dev libzstd-dev
+
+       $sudo pip3 install scikit-image
+
+테스트
+
+   $python3  
+     import torch  
+     import tensorrt  
+     import torch2trt  
+   
+   
 <br>
 <a href="default.asp"><img src=https://user-images.githubusercontent.com/87571989/198910800-8fbc3b43-959a-4435-85ce-93292ff50c37.png></img> </a>
 
